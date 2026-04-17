@@ -1,6 +1,10 @@
-// Flask API endpoints (same origin).
-const QUESTIONS_API = "/api/questions";
-const ANSWER_API = "/api/answer";
+// Use local Flask API on localhost, otherwise use deployed backend.
+const API_URL = window.location.hostname === "localhost"
+  ? ""
+  : "https://kbc-vq3p.onrender.com";
+
+const QUESTIONS_API = API_URL + "/api/questions";
+const ANSWER_API = API_URL + "/api/answer";
 const optionLabels = ["A", "B", "C", "D"];
 
 // Get HTML elements.

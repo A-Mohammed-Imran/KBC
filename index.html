@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KBC Quiz Game</title>
+  <link rel="stylesheet" href="./static/style.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>Kaun Banega Quiz</h1>
+    <p class="subtitle">Netlify Frontend + API Backend</p>
+
+    <p id="statusBox" class="status hidden"></p>
+
+    <div id="startScreen" class="card">
+      <p>Click Start to load quiz questions.</p>
+      <button id="startBtn">Start Quiz</button>
+    </div>
+
+    <div id="quizScreen" class="card hidden">
+      <div class="info-bar">
+        <span>Question: <span id="questionNumber">1</span>/<span id="totalQuestions">0</span></span>
+        <span>Score: <span id="score">0</span></span>
+      </div>
+
+      <h2 id="questionText">Question text will appear here</h2>
+
+      <div id="optionsContainer" class="options"></div>
+
+      <p id="feedback" class="feedback"></p>
+
+      <div class="button-row">
+        <button id="nextBtn" disabled>Next Question</button>
+      </div>
+    </div>
+
+    <div id="resultScreen" class="card hidden">
+      <h2>Quiz Completed</h2>
+      <p>Your Final Score: <strong id="finalScore">0</strong></p>
+      <button id="restartBtn">Play Again</button>
+    </div>
+  </div>
+
+  <script src="./static/script.js"></script>
+</body>
+</html>
