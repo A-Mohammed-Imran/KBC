@@ -1,4 +1,6 @@
-from flask import Flask, jsonify, render_template, request
+import os
+
+from flask import Flask, jsonify, request
 from flask_cors import CORS
 
 app = Flask(__name__)
@@ -47,27 +49,16 @@ questions = [
 
 @app.route("/")
 def home():
-  # Render the main HTML page.
-  return render_template("index.html")
+  # Simple health message to confirm backend is running.
+  return jsonify({"message": "KBC backend is running"})
 
 
 @app.route("/api/questions", methods=["GET"])
 def get_questions():
   print("GET /api/questions called")
 
-  # Send questions without answers to the frontend.
-  public_questions = []
-
-  for item in questions:
-    public_questions.append(
-      {
-        "id": item["id"],
-        "question": item["question"],
-        "options": item["options"]
-      }
-    )
-
-  return jsonify(public_questions)
+  # Return JSON data for API clients.
+  return jsonify(questions)
 
 
 @app.route("/api/answer", methods=["POST"])
@@ -109,4 +100,6 @@ def check_answer():
 
 
 if __name__ == "__main__":
-  app.run(debug=True)
+  # Render provides the port using environment variable PORT.
+  port = int(os.environ.get("PORT", 5000))
+  app.run(host="0.0.0.0", port=port, debug=False)
