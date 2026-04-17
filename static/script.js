@@ -1,10 +1,8 @@
-// Use local Flask API on localhost, otherwise use deployed backend.
-const API_URL = window.location.hostname === "localhost"
-  ? ""
-  : "https://kbc-vq3p.onrender.com";
+// Backend base URL (Render deployment).
+const API_URL = "https://kbc-vq3p.onrender.com";
 
-const QUESTIONS_API = API_URL + "/api/questions";
-const ANSWER_API = API_URL + "/api/answer";
+const QUESTIONS_API = `${API_URL}/api/questions`;
+const ANSWER_API = `${API_URL}/api/answer`;
 const optionLabels = ["A", "B", "C", "D"];
 
 // Get HTML elements.
@@ -38,16 +36,20 @@ restartBtn.addEventListener("click", startQuiz);
 async function startQuiz() {
   resetQuizState();
   showScreen("quiz");
-  showStatus("Loading questions...", "info");
+  showStatus("Waking up server... please wait", "info");
 
   try {
     const response = await fetch(QUESTIONS_API);
+    console.log("GET /api/questions status:", response.status);
 
     if (!response.ok) {
       throw new Error("Failed to fetch questions. Status: " + response.status);
     }
 
-    questions = await response.json();
+    const data = await response.json();
+    console.log("GET /api/questions data:", data);
+
+    questions = data;
 
     if (!Array.isArray(questions) || questions.length === 0) {
       throw new Error("No questions available from backend.");
@@ -57,9 +59,10 @@ async function startQuiz() {
     hideStatus();
     loadQuestion();
   } catch (error) {
+    console.error("Error:", error);
     showScreen("start");
-    showStatus(error.message, "error");
-    console.error("Start quiz error:", error.message);
+    showStatus("Could not load questions from backend.", "error");
+    alert("Backend not reachable. Please try again.");
   }
 }
 
@@ -159,16 +162,20 @@ async function checkAnswer(selectedAnswer, selectedIndex, selectedButton) {
       })
     });
 
+    console.log("POST /api/answer status:", response.status);
+
     if (!response.ok) {
       throw new Error("Failed to submit answer. Status: " + response.status);
     }
 
     const result = await response.json();
+    console.log("POST /api/answer data:", result);
     showAnswerResult(result, selectedButton, selectedIndex);
   } catch (error) {
+    console.error("Error:", error);
     feedbackElement.textContent = "Error: " + error.message;
     feedbackElement.className = "feedback incorrect-text";
-    console.error("Answer submit error:", error.message);
+    alert("Backend not reachable. Please try again.");
   }
 
   nextBtn.disabled = false;

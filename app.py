@@ -1,6 +1,8 @@
 from flask import Flask, jsonify, render_template, request
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 
 # Simple in-memory question list (no database).
 questions = [
@@ -51,6 +53,8 @@ def home():
 
 @app.route("/api/questions", methods=["GET"])
 def get_questions():
+  print("GET /api/questions called")
+
   # Send questions without answers to the frontend.
   public_questions = []
 
@@ -69,6 +73,8 @@ def get_questions():
 @app.route("/api/answer", methods=["POST"])
 def check_answer():
   data = request.get_json(silent=True) or {}
+  print("POST /api/answer payload:", data)
+
   question_id = data.get("question_id")
   selected_answer = data.get("selected_answer")
   selected_index = data.get("selected_index")
