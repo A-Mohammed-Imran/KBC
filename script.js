@@ -39,14 +39,14 @@ async function startQuiz() {
   showStatus("Waking up server... please wait", "info");
 
   try {
-    const response = await fetch(QUESTIONS_API);
-    console.log("GET /api/questions status:", response.status);
+    const res = await fetch(QUESTIONS_API);
+    console.log("GET /api/questions status:", res.status);
 
-    if (!response.ok) {
-      throw new Error("Failed to fetch questions. Status: " + response.status);
+    if (!res.ok) {
+      throw new Error("Failed to fetch questions. Status: " + res.status);
     }
 
-    const data = await response.json();
+    const data = await res.json();
     console.log("GET /api/questions data:", data);
 
     questions = data;
@@ -58,11 +58,11 @@ async function startQuiz() {
     totalQuestionsElement.textContent = questions.length;
     hideStatus();
     loadQuestion();
-  } catch (error) {
-    console.error("Error:", error);
+  } catch (err) {
+    console.error("Error:", err);
     showScreen("start");
     showStatus("Could not load questions from backend.", "error");
-    alert("Backend not reachable. Please try again.");
+    alert("Backend not reachable");
   }
 }
 
@@ -150,7 +150,7 @@ async function checkAnswer(selectedAnswer, selectedIndex, selectedButton) {
   const currentQuestion = questions[currentQuestionIndex];
 
   try {
-    const response = await fetch(ANSWER_API, {
+    const res = await fetch(ANSWER_API, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -162,20 +162,20 @@ async function checkAnswer(selectedAnswer, selectedIndex, selectedButton) {
       })
     });
 
-    console.log("POST /api/answer status:", response.status);
+    console.log("POST /api/answer status:", res.status);
 
-    if (!response.ok) {
-      throw new Error("Failed to submit answer. Status: " + response.status);
+    if (!res.ok) {
+      throw new Error("Failed to submit answer. Status: " + res.status);
     }
 
-    const result = await response.json();
+    const result = await res.json();
     console.log("POST /api/answer data:", result);
-    showAnswerResult(result, selectedButton, selectedIndex);
-  } catch (error) {
-    console.error("Error:", error);
-    feedbackElement.textContent = "Error: " + error.message;
+    showAnswerResult(result, selectedButton);
+  } catch (err) {
+    console.error("Error:", err);
+    feedbackElement.textContent = "Error: " + err.message;
     feedbackElement.className = "feedback incorrect-text";
-    alert("Backend not reachable. Please try again.");
+    alert("Backend not reachable");
   }
 
   nextBtn.disabled = false;
@@ -189,7 +189,7 @@ function disableAllOptions() {
   }
 }
 
-function showAnswerResult(result, selectedButton, selectedIndex) {
+function showAnswerResult(result, selectedButton) {
   const currentQuestion = questions[currentQuestionIndex];
   const allButtons = optionsContainer.querySelectorAll(".option-btn");
 
