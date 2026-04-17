@@ -3,16 +3,18 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>KBC Quiz Game</title>
-  <link rel="stylesheet" href="style.css" />
+  <title>KBC Quiz Game - Flask Version</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
 </head>
 <body>
   <div class="container">
     <h1>Kaun Banega Quiz</h1>
-    <p class="subtitle">Simple Quiz Game Project</p>
+    <p class="subtitle">Simple Flask Full-Stack Student Project</p>
+
+    <p id="statusBox" class="status hidden"></p>
 
     <div id="startScreen" class="card">
-      <p>Test your knowledge with multiple choice questions.</p>
+      <p>Click Start to load quiz questions from Flask API.</p>
       <button id="startBtn">Start Quiz</button>
     </div>
 
@@ -20,17 +22,15 @@
       <div class="info-bar">
         <span>Question: <span id="questionNumber">1</span>/<span id="totalQuestions">0</span></span>
         <span>Score: <span id="score">0</span></span>
-        <span>Time: <span id="timer">30</span>s</span>
       </div>
 
-      <h2 id="questionText">Question text will come here</h2>
+      <h2 id="questionText">Question text will appear here</h2>
 
       <div id="optionsContainer" class="options"></div>
 
-      <p id="message" class="message"></p>
+      <p id="feedback" class="feedback"></p>
 
       <div class="button-row">
-        <button id="lifelineBtn">Use 50-50</button>
         <button id="nextBtn" disabled>Next Question</button>
       </div>
     </div>
@@ -42,6 +42,6 @@
     </div>
   </div>
 
-  <script src="script.js"></script>
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>
