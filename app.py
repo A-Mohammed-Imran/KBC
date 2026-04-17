@@ -9,9 +9,63 @@ CORS(app)
 questions = [
   {
     "id": 1,
-    "question": "Capital of India?",
-    "options": ["Delhi", "Mumbai", "Chennai", "Kolkata"],
-    "answer": "Delhi"
+    "question": "What is the capital of India?",
+    "options": ["New Delhi", "Mumbai", "Chennai", "Kolkata"],
+    "answer": "New Delhi"
+  },
+  {
+    "id": 2,
+    "question": "Which planet is known as the Red Planet?",
+    "options": ["Earth", "Mars", "Jupiter", "Venus"],
+    "answer": "Mars"
+  },
+  {
+    "id": 3,
+    "question": "What is 5 + 7?",
+    "options": ["10", "11", "12", "13"],
+    "answer": "12"
+  },
+  {
+    "id": 4,
+    "question": "Who is the father of computers?",
+    "options": ["Charles Babbage", "Einstein", "Newton", "Tesla"],
+    "answer": "Charles Babbage"
+  },
+  {
+    "id": 5,
+    "question": "Which language is used for web styling?",
+    "options": ["HTML", "CSS", "Python", "Java"],
+    "answer": "CSS"
+  },
+  {
+    "id": 6,
+    "question": "Which is the largest ocean?",
+    "options": ["Atlantic", "Indian", "Pacific", "Arctic"],
+    "answer": "Pacific"
+  },
+  {
+    "id": 7,
+    "question": "Which country invented cricket?",
+    "options": ["India", "England", "Australia", "South Africa"],
+    "answer": "England"
+  },
+  {
+    "id": 8,
+    "question": "What is the boiling point of water?",
+    "options": ["90°C", "100°C", "80°C", "120°C"],
+    "answer": "100°C"
+  },
+  {
+    "id": 9,
+    "question": "Which gas do plants use for photosynthesis?",
+    "options": ["Oxygen", "Nitrogen", "Carbon Dioxide", "Hydrogen"],
+    "answer": "Carbon Dioxide"
+  },
+  {
+    "id": 10,
+    "question": "Which is the fastest land animal?",
+    "options": ["Lion", "Tiger", "Cheetah", "Horse"],
+    "answer": "Cheetah"
   }
 ]
 
@@ -32,12 +86,24 @@ def get_questions():
 def answer():
   # Read selected answer from request body.
   data = request.get_json(silent=True) or {}
-  q = questions[0]
+  question_id = data.get("question_id")
+  selected_answer = data.get("selected_answer")
+
+  # Find the selected question by id.
+  selected_question = None
+
+  for item in questions:
+    if item["id"] == question_id:
+      selected_question = item
+      break
+
+  if selected_question is None:
+    return jsonify({"error": "Invalid question id"}), 400
 
   return jsonify(
     {
-      "correct": data.get("selected_answer") == q["answer"],
-      "correct_answer": q["answer"]
+      "correct": selected_answer == selected_question["answer"],
+      "correct_answer": selected_question["answer"]
     }
   )
 
